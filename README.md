@@ -32,10 +32,11 @@ Follow these steps to generate a VS Code extension skeleton:
 
    To generate a VS Code extension skeleton, run the following command:
    ```bash
-   docker run -it --rm -v /path/to/your/directory:/home/dockeruser yeoman-vscode
+   mkdir app  # yeoman will write the skeleton into this folder
+   docker run -it --rm -v $(pwd)/app:/app --user $(id -u):$(id -g) dhruvnotfound/yeoman-vscode
    ```
 
-   Replace `/path/to/your/directory` with the path to the local folder where you want the generated files to be placed.
+   The generated skeleton will be placed into `$(pwd)/app`.
 
    This command will:
    - Run the Docker container with the Yeoman generator.
@@ -49,30 +50,12 @@ Follow these steps to generate a VS Code extension skeleton:
 
 ## Dockerfile
 
-Below is the Dockerfile used in this repository. It installs Node.js, npm, the Yeoman generator, and the VS Code extension generator.
-
-```Dockerfile
-FROM node:16
-
-# Set the working directory
-WORKDIR /app
-
-# Install Yeoman and the VS Code Extension generator
-RUN npm install -g yo generator-code
-RUN npm install -g stream
-
-# Create a non-root user
-RUN useradd -m dockeruser
-USER dockeruser
-
-# Default command to run the VS Code extension generator
-CMD ["yo", "code"]
-```
+The Dockerfile used in this repository will install Node.js, npm, the Yeoman generator and the VS Code extension generator.
 
 ## Notes
 
 - You can modify the Dockerfile to include any additional dependencies you may need.
-- If you encounter permission issues, ensure your Docker configuration allows volume mounting with the appropriate access rights.
+- If you encounter permission issues, ensure your Docker configuration allows volume mounting with the appropriate access rights. In above example, this is done using `--user $(id -u):$(id -g)`.
 
 ## License
 

@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:25
 
 WORKDIR /app
 
@@ -8,6 +8,8 @@ RUN npm install -g stream
 
 # Creating a non-root user
 RUN useradd -m dockeruser
+# The following line is required to avoid "EACCES: permission denied, mkdir '/app/xyz'"
+RUN chown dockeruser /app
 USER dockeruser
 
 ENTRYPOINT ["yo"]
